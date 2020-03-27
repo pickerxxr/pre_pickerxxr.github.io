@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><title>SQL Server notes-表的管理 | Picker</title><meta name="description" content="SQL Server notes-表的管理"><meta name="keywords" content="SQL"><meta name="author" content="Alan Liu"><meta name="copyright" content="Alan Liu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="canonical" href="http://pickerxxr.github.io/2020/03/27/SQL-Server-notes-表的管理/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="SQL Server notes-表的管理"><meta name="twitter:description" content="SQL Server notes-表的管理"><meta name="twitter:image" content="https://s1.ax1x.com/2020/03/27/GiZ3m4.png"><meta property="og:type" content="article"><meta property="og:title" content="SQL Server notes-表的管理"><meta property="og:url" content="http://pickerxxr.github.io/2020/03/27/SQL-Server-notes-表的管理/"><meta property="og:site_name" content="Picker"><meta property="og:description" content="SQL Server notes-表的管理"><meta property="og:image" content="https://s1.ax1x.com/2020/03/27/GiZ3m4.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="next" title="网络度量：中心性、传递性和相互性" href="http://pickerxxr.github.io/2020/03/24/网络度量：中心性、传递性和相互性/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://pickerxxr.github.io","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight_copy: 'true',
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    title: '添加書籤',
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天'
+
+  
+}</script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div class="auto_open" id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#表的管理"><span class="toc-number">1.</span> <span class="toc-text">表的管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL-Server-表的概述"><span class="toc-number">2.</span> <span class="toc-text">SQL Server 表的概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据类型简介："><span class="toc-number">2.0.1.</span> <span class="toc-text">数据类型简介：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制和默认值"><span class="toc-number">2.1.</span> <span class="toc-text">控制和默认值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#约束"><span class="toc-number">2.1.1.</span> <span class="toc-text">约束</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用SQL-Server管理平台对表进行操作"><span class="toc-number">2.2.</span> <span class="toc-text">使用SQL Server管理平台对表进行操作</span></a></li></ol></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://s1.ax1x.com/2020/03/27/GiZ3m4.png)"><div id="page-header"><span class="pull-left"> <a class="blog_title" id="site-name" href="/">Picker</a></span><div class="open toggle-menu pull-right"><div class="menu-icon-first"></div><div class="menu-icon-second"></div><div class="menu-icon-third"></div></div><span class="pull-right menus"><div class="mobile_author_icon"><img class="lozad" src="https://i.loli.net/2019/08/16/hMQspjKVYGJRgIn.jpg" onerror="onerror=null;src='/img/friend_404.gif'"><div class="mobile_author-info__description">小白一个。</div></div><hr><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a><script>document.body.addEventListener('touchstart', function(){ });</script></div></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title"><div class="posttitle">SQL Server notes-表的管理</div></div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2020-03-27<span class="post-meta__separator">|</span><i class="fa fa-history" aria-hidden="true"></i> 更新於 2020-03-27</time><span class="post-meta__separator mobile_hidden">|</span><span class="mobile_hidden"><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/SQL/">SQL</a></span></div></div></div><div class="layout layout_post" id="content-inner">   <article id="post"><div class="article-container" id="post-content"><h1 id="表的管理"><a href="#表的管理" class="headerlink" title="表的管理"></a>表的管理</h1><h1 id="SQL-Server-表的概述"><a href="#SQL-Server-表的概述" class="headerlink" title="SQL Server 表的概述"></a>SQL Server 表的概述</h1><h3 id="数据类型简介："><a href="#数据类型简介：" class="headerlink" title="数据类型简介："></a>数据类型简介：</h3><ul>
+<li><p>数据类型可以归纳为：</p>
+<ol>
+<li>字符数据</li>
+<li>二进制字符数据</li>
+<li>日期和时间数据</li>
+<li>逻辑数据</li>
+<li>数字数据</li>
+<li>其他数据类型</li>
+</ol>
+<ul>
+<li>另外，可以用Transact-SQL自主定义数据类型</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li><p>字符数据：</p>
+<ol>
+<li><p>字符数据类型：输入时要用单引号或者双引号括起来</p>
+<blockquote>
+<p>定长字符型： char(n)  n: 1 ~ 8000  超出截断；较短填上空格；好处是空间大存取快</p>
+<p>变长字符型 varchar(n): n: 1~8000  超出截断；较短实际储存；空间小</p>
+<p>文本型：text 2^31 - 1 个字符 长度可变；不能用作变量或者储存过程的参数</p>
+</blockquote>
+<blockquote>
+<p>字符编码：- ASCII码：一个英文字母占一个字节的空间，一个中文汉字占两个字节的空间。</p>
+<pre><code>- ANSI码：</code></pre></blockquote>
+</li>
+<li><p>Unicode字符编码：所需要了解的是不同数据类型下单个字符所占据的字节数</p>
+</li>
+</ol>
+</li>
+<li><p>二进制字符类型</p>
+<p>SQL Server二进制数据类型用于存储二进制或者字符串</p>
+<p>SQL Server有3种有效二进制数据类型</p>
+<ul>
+<li>定长：超出阶段，不足补齐</li>
+<li>边长：</li>
+<li>大块：</li>
+</ul>
+</li>
+<li><p>日期和时间数据类型</p>
+<ul>
+<li>datetime: 两个长度为四字节的整数——日期和时间   yyyy-MM–dd  HH:mm:ss:fff  1/300秒  3.33ms</li>
+<li>smalldatetime</li>
+<li>dattimeoffset</li>
+<li>date</li>
+<li>time</li>
+</ul>
+</li>
+<li><p>逻辑数据类型：</p>
+<ul>
+<li>位数据类型：一个字节：取值只有0、1、NULL</li>
+<li>True: 1     False:0</li>
+</ul>
+</li>
+<li><p>数字数据类型：</p>
+<ul>
+<li>整数数据类型：int：1bit/smallint：2bits/tinyint：4bits/bigint：8bits</li>
+<li>只要数据空间够用了，就选择最小的数值类型就可以，所以要根据具体的任务进行适当的调整</li>
+<li>近似数值数据类型：近似数据类型包括float和real类型 用于表示浮点类型</li>
+<li>精确数值数字类型：decimal &amp; numeric<ul>
+<li>格式如下： decimal[p[, s]]    numeric[p[, s]]  其中p是指精度  s指定了小数的位数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>货币数据类型</p>
+</li>
+<li><p>其他的数据类型…</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="控制和默认值"><a href="#控制和默认值" class="headerlink" title="控制和默认值"></a>控制和默认值</h2><ul>
+<li>空值<ul>
+<li>当用户在表中插入一行但是没有对应其中某列的指定值时，该列将出现空值（NULL）.</li>
+<li>要注意的是，在选取这样的空值时，所使用的条件语句是SELECT * … WHERE … is NULL。</li>
+</ul>
+</li>
+<li>默认值：<ul>
+<li>数据的默认取值：不依附于具体的表对象，即默认值对象的作用范围</li>
+</ul>
+</li>
+</ul>
+<h3 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h3><ul>
+<li>SQL Server 2008 支持非空值约束、默认约束、唯一性约束、主键约束、外键约束。</li>
+<li>主键约束：主键的值不能是NULL</li>
+</ul>
+<h2 id="使用SQL-Server管理平台对表进行操作"><a href="#使用SQL-Server管理平台对表进行操作" class="headerlink" title="使用SQL Server管理平台对表进行操作"></a>使用SQL Server管理平台对表进行操作</h2><ol>
+<li><p>使用管理平台创建和修改表</p>
+<p>… 一系列操作步骤</p>
+</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alan Liu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章鏈接: </span><span class="post-copyright-info"><a href="http://pickerxxr.github.io/2020/03/27/SQL-Server-notes-表的管理/">http://pickerxxr.github.io/2020/03/27/SQL-Server-notes-表的管理/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本博客所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="http://pickerxxr.github.io" target="_blank">Picker</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SQL/">SQL    </a></div><div class="post_share"><div class="social-share" data-image="https://s1.ax1x.com/2020/03/27/GiZ3m4.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-buttom"><i class="fa fa-qrcode"></i> 打賞<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="lozad post-qr-code__img" src="/img/wechat.jpg"><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="lozad post-qr-code__img" src="/img/alipay.jpg"><div class="post-qr-code__desc">支付寶</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="next-post pull-full"><a href="/2020/03/24/网络度量：中心性、传递性和相互性/"><img class="next_cover lozad" data-src="https://s1.ax1x.com/2020/03/24/8LCbAP.png" onerror="onerror=null;src='/img/404.jpg'"><div class="label">下一篇</div><div class="next_info"><span>网络度量：中心性、传递性和相互性</span></div></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2020 By Alan Liu</div><div class="framework-info"><span>Power by </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly"><span>Butterfly</span></a></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><section class="rightside" id="rightside"><i class="fa fa-book" id="readmode" title="閲讀模式"> </i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="簡繁轉換">繁</a><i class="fa fa-moon-o nightshift" id="nightshift" title="夜間模式"></i></section><div id="post_bottom"><div id="post_bottom_items"><a id="to_comment" href="#post-comment"><i class="scroll_to_comment fa fa-comments"></i></a><i class="fa fa-list" id="mobile_toc"></i><div id="toc_mobile"><div class="toc_mobile_headline">目錄</div><ol class="toc_mobile_items"><li class="toc_mobile_items-item toc_mobile_items-level-1"><a class="toc_mobile_items-link" href="#表的管理"><span class="toc_mobile_items-number">1.</span> <span class="toc_mobile_items-text">表的管理</span></a></li><li class="toc_mobile_items-item toc_mobile_items-level-1"><a class="toc_mobile_items-link" href="#SQL-Server-表的概述"><span class="toc_mobile_items-number">2.</span> <span class="toc_mobile_items-text">SQL Server 表的概述</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#数据类型简介："><span class="toc_mobile_items-number">2.0.1.</span> <span class="toc_mobile_items-text">数据类型简介：</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#控制和默认值"><span class="toc_mobile_items-number">2.1.</span> <span class="toc_mobile_items-text">控制和默认值</span></a><ol class="toc_mobile_items-child"><li class="toc_mobile_items-item toc_mobile_items-level-3"><a class="toc_mobile_items-link" href="#约束"><span class="toc_mobile_items-number">2.1.1.</span> <span class="toc_mobile_items-text">约束</span></a></li></ol></li><li class="toc_mobile_items-item toc_mobile_items-level-2"><a class="toc_mobile_items-link" href="#使用SQL-Server管理平台对表进行操作"><span class="toc_mobile_items-number">2.2.</span> <span class="toc_mobile_items-text">使用SQL Server管理平台对表进行操作</span></a></li></ol></div></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/nightshift.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zindex="-1" data-click="false"></script><script src="/js/tw_cn.js"></script><script>translateInitilization()
+
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@1.2.2/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script><script>const observer = lozad(); // lazy loads elements with default selector as '.lozad'
+observer.observe();</script></body></html>
